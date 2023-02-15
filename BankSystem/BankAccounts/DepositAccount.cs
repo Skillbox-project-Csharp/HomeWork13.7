@@ -1,19 +1,24 @@
 ﻿using HomeWork13._7.BankSystem.BankAccounts.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeWork13._7.BankSystem.BankAccounts
 {
-    internal class DepositAccount : BankAccount, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
+    internal class DepositAccount : BankAccount, INotifyPropertyChanged, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
     {
+        
         //костыль
         public override Type TypeAccount { get ; set ; } = typeof(DepositAccount);
         public DepositAccount(Guid id, double money) : base(id, money) { }
         public DepositAccount()
             : base(Guid.NewGuid(), 0) { }
+
+        public override event PropertyChangedEventHandler PropertyChanged;
+
         public override bool AddMoney(double value)
         {
             if (value <= 0)
@@ -21,6 +26,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
             if (Money + value > 0)
             {
                 _money += value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
                 return true;
             }
             return false;
@@ -34,6 +40,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
         public override BankAccount Replenishment(double value)
         {
             this.AddMoney(value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
             return new BankAccount(this.Id, this.Money);
         }
 
@@ -51,6 +58,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
 
                         }
                     }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using HomeWork13._7.BankSystem.BankAccounts;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -12,15 +13,16 @@ namespace HomeWork13._7.BankSystem.BankClients
 {
     internal class BankClient : Client, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         public override Guid Id => _Id;
-        public override List<BankAccount> BankAccounts => _bankAccounts;
+        public override ObservableCollection<BankAccount> BankAccounts => _bankAccounts;
         public override string Name
         {
             get => _name;
             set
             {
                 _name = value;
-                OnPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
             }
         }
         public override string SurName
@@ -29,7 +31,7 @@ namespace HomeWork13._7.BankSystem.BankClients
             set
             {
                 _surName = value;
-                OnPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SurName)));
             }
         }
         public override string Patronymic
@@ -37,21 +39,20 @@ namespace HomeWork13._7.BankSystem.BankClients
             get => _patronymic;
             set { 
                 _patronymic = value;
-                OnPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Patronymic)));
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public BankClient()
         {
             _Id = Guid.NewGuid();
-            _bankAccounts = new List<BankAccount>();
+            _bankAccounts = new ObservableCollection<BankAccount>();
             Name = string.Empty;
             SurName = string.Empty;
             Patronymic = string.Empty;
         }
-        public BankClient(string name, string surName, string patronymic, Guid id, List<BankAccount> bankAccounts)
+        public BankClient(string name, string surName, string patronymic, Guid id, ObservableCollection<BankAccount> bankAccounts)
         {
             _Id = id;
             _bankAccounts = bankAccounts;
@@ -61,13 +62,7 @@ namespace HomeWork13._7.BankSystem.BankClients
         }
 
         public BankClient(string name, string surName, string patronymic)
-            : this(name, surName, patronymic, Guid.NewGuid(), new List<BankAccount>()) { }
+            : this(name, surName, patronymic, Guid.NewGuid(), new ObservableCollection<BankAccount>()) { }
 
-
-
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
     }
 }

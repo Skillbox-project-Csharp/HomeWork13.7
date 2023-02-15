@@ -1,16 +1,19 @@
 ﻿using HomeWork13._7.BankSystem.BankAccounts.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeWork13._7.BankSystem.BankAccounts
 {
-    internal class BankAccount :  IAddMoney, ISubMoney, IEquatable<BankAccount>, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
+    internal class BankAccount : INotifyPropertyChanged, IAddMoney, ISubMoney, IEquatable<BankAccount>, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
     {
         protected double _money;
         protected Guid _id;
+
+        public virtual event PropertyChangedEventHandler PropertyChanged;
 
         public double  Money => _money;
         public Guid Id => _id;
@@ -21,6 +24,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
         {
             _id = id;
             _money = money;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
         }
         public BankAccount()
             : this(Guid.NewGuid(), 0) { }
@@ -32,6 +36,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
             if (Money + value > 0)
             {
                 _money += value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
                 return true;
             }
             return false;
@@ -44,6 +49,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
             if (Money - value >= 0)
             {
                 _money -= value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
                 return true;
             }
             return false;
@@ -56,6 +62,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
         public virtual BankAccount Replenishment(double value)
         {
             this.AddMoney(value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
             return new BankAccount(this.Id, this.Money);
         }
 
@@ -73,6 +80,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
 
                         }
                     }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
         }
     }
 }

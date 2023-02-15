@@ -55,9 +55,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BankWorkers\Consultant.cs" />
+    <Compile Include="BankWorkers\Manager.cs" />
+    <Compile Include="BankWorkers\Worker.cs" />
+    <Compile Include="EmployeeSelectionWindow.xaml.cs">
+      <DependentUpon>EmployeeSelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ReplenishmentWindow.xaml.cs">
       <DependentUpon>ReplenishmentWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="EmployeeSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -122,5 +132,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

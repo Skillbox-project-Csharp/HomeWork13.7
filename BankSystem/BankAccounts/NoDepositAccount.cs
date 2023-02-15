@@ -1,13 +1,14 @@
 ﻿using HomeWork13._7.BankSystem.BankAccounts.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeWork13._7.BankSystem.BankAccounts
 {
-    internal class NoDepositAccount : BankAccount, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
+    internal class NoDepositAccount : BankAccount, INotifyPropertyChanged , IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
     {
         //костыль
         public override Type TypeAccount { get; set; } = typeof(NoDepositAccount);
@@ -16,17 +17,24 @@ namespace HomeWork13._7.BankSystem.BankAccounts
             : base(Guid.NewGuid(), 0) { }
         public override bool AddMoney(double value)
         {
-            return base.AddMoney(value);
+            bool isAdded = base.AddMoney(value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
+            return isAdded;
         }
+
+        public override event PropertyChangedEventHandler PropertyChanged;
 
         public override bool SubMoney(double value)
         {
-            return base.SubMoney(value);
+            bool isSubed = base.SubMoney(value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
+            return isSubed;
         }
 
         public override BankAccount Replenishment(double value)
         {
             this.AddMoney(value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
             return new BankAccount(this.Id, this.Money);
         }
 
@@ -44,6 +52,7 @@ namespace HomeWork13._7.BankSystem.BankAccounts
 
                         }
                     }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Money)));
         }
     }
 }

@@ -2,6 +2,7 @@
 using HomeWork13._7.BankSystem.BankAccounts;
 using HomeWork13._7.BankSystem.BankAccounts.Interfaces;
 using HomeWork13._7.BankSystem.BankClients;
+using HomeWork13._7.BankWorkers;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ namespace HomeWork13._7
     /// </summary>
     public partial class MainWindow : Window
     {
+        internal Worker Employee;
         internal ObservableCollection<Client> BankClients { get; set; }
         internal Client SelectedBankClient1 { get; set; }
         internal Client SelectedBankClient2 { get; set; }
@@ -22,6 +24,11 @@ namespace HomeWork13._7
         public MainWindow()
         {
             InitializeComponent();
+            EmployeeSelectionWindow openAccountWindow = new EmployeeSelectionWindow();
+            if (openAccountWindow.ShowDialog() == true)
+            {
+                Employee = openAccountWindow.GetWorker;
+            }
             BankClients = new ObservableCollection<Client>
             {
                 new BankClient{Name ="Анна", SurName="Петровна", Patronymic="Игоревна"},
@@ -29,6 +36,7 @@ namespace HomeWork13._7
                 new BankClient{Name ="Андрей", SurName="Краснов", Patronymic=""}
             };
             GeneratingAccounts(BankClients);
+
             ListBoxDataClients1.ItemsSource = BankClients;
             ListBoxDataClients2.ItemsSource = BankClients;
         }
@@ -42,9 +50,9 @@ namespace HomeWork13._7
                 bankAccount.AddMoney(i);
                 depositAccount.AddMoney(i);
                 noDepositAccount.AddMoney(i);
-                Bank.OpenNewBankAccount(clients[i], bankAccount);
-                Bank.OpenNewBankAccount(clients[i], depositAccount);
-                Bank.OpenNewBankAccount(clients[i], noDepositAccount);
+                Employee?.OpenNewBankAccount(clients[i], bankAccount);
+                Employee?.OpenNewBankAccount(clients[i], depositAccount);
+                Employee?.OpenNewBankAccount(clients[i], noDepositAccount);
             }
         }
         private void ListBoxDataClients1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -83,9 +91,7 @@ namespace HomeWork13._7
         {
             if (SelectedBankClient1 != null && SelectedBankAccount1 != null)
             {
-                Bank.CloseBankAccount(SelectedBankClient1, SelectedBankAccount1);
-                ListBoxClientBankAccounts1.Items.Refresh();
-                ListBoxClientBankAccounts2.Items.Refresh();
+                Employee?.CloseBankAccount(SelectedBankClient1, SelectedBankAccount1);
             }
         }
 
@@ -96,10 +102,8 @@ namespace HomeWork13._7
                 OpenAccountWindow openAccountWindow = new OpenAccountWindow();
                 if (openAccountWindow.ShowDialog() == true)
                 {
-                    Bank.OpenNewBankAccount(SelectedBankClient1, openAccountWindow.GetBankAccount);
+                    Employee?.OpenNewBankAccount(SelectedBankClient1, openAccountWindow.GetBankAccount);
                 }
-                ListBoxClientBankAccounts1.Items.Refresh();
-                ListBoxClientBankAccounts2.Items.Refresh();
             }
         }
 
@@ -110,10 +114,8 @@ namespace HomeWork13._7
                 ReplenishmentAccount replenishmentWindow = new ReplenishmentAccount("Пополнить счет на");
                 if (replenishmentWindow.ShowDialog() == true)
                 {
-                    Bank.ReplenishmentByTypeAccount(SelectedBankClient1, SelectedBankAccount1.TypeAccount, replenishmentWindow.AmountAddMoney);
+                    Employee?.ReplenishmentByTypeAccount(SelectedBankClient1, SelectedBankAccount1.TypeAccount, replenishmentWindow.AmountAddMoney);
                 }
-                ListBoxClientBankAccounts1.Items.Refresh();
-                ListBoxClientBankAccounts2.Items.Refresh();
             }
         }
 
@@ -122,7 +124,7 @@ namespace HomeWork13._7
             ReplenishmentAccount replenishmentWindow = new ReplenishmentAccount("Сумма перевода");
             if (replenishmentWindow.ShowDialog() == true)
             {
-                Bank.MoneyTransfer
+                Employee?.MoneyTransfer
                     (
                     SelectedBankClient1,
                     SelectedBankAccount1,
@@ -130,8 +132,6 @@ namespace HomeWork13._7
                     SelectedBankAccount2,
                     replenishmentWindow.AmountAddMoney
                     );
-                ListBoxClientBankAccounts1.Items.Refresh();
-                ListBoxClientBankAccounts2.Items.Refresh();
             }
         }
 
@@ -140,7 +140,7 @@ namespace HomeWork13._7
             ReplenishmentAccount replenishmentWindow = new ReplenishmentAccount("Сумма перевода");
             if (replenishmentWindow.ShowDialog() == true)
             {
-                Bank.MoneyTransferCov
+                Employee?.MoneyTransferCov
                     (
                     SelectedBankClient1,
                     SelectedBankAccount1,
@@ -148,8 +148,6 @@ namespace HomeWork13._7
                     SelectedBankAccount2,
                     replenishmentWindow.AmountAddMoney
                     );
-                ListBoxClientBankAccounts1.Items.Refresh();
-                ListBoxClientBankAccounts2.Items.Refresh();
             }
         }
     }
