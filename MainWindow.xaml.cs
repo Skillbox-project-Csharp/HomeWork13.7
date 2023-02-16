@@ -2,8 +2,10 @@
 using HomeWork13._7.BankSystem.BankAccounts;
 using HomeWork13._7.BankSystem.BankAccounts.Interfaces;
 using HomeWork13._7.BankSystem.BankClients;
+using HomeWork13._7.BankSystem.Documents.AccountTransaction;
 using HomeWork13._7.BankWorkers;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,7 +17,8 @@ namespace HomeWork13._7
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal Worker Employee;
+        internal Worker Employee { get; set; }
+        AccountTransactionHistory HistoryOperations { get; set; }
         internal ObservableCollection<Client> BankClients { get; set; }
         internal Client SelectedBankClient1 { get; set; }
         internal Client SelectedBankClient2 { get; set; }
@@ -28,7 +31,12 @@ namespace HomeWork13._7
             if (openAccountWindow.ShowDialog() == true)
             {
                 Employee = openAccountWindow.GetWorker;
-            }
+            }else this.Close();
+            HistoryOperations = new AccountTransactionHistory();
+            Employee.OpenCloseBankAccountEvent += HistoryOperations.OpenCloseBankAccountTransactionDo;
+            Employee.ReplenishmentAccountEvent += HistoryOperations.ReplenishmentAccountTransactionDo;
+            Employee.MoneyTransferEvent+= HistoryOperations.MoneyTransferTransactionDo;
+            
             BankClients = new ObservableCollection<Client>
             {
                 new BankClient{Name ="Анна", SurName="Петровна", Patronymic="Игоревна"},
@@ -39,7 +47,9 @@ namespace HomeWork13._7
 
             ListBoxDataClients1.ItemsSource = BankClients;
             ListBoxDataClients2.ItemsSource = BankClients;
+            HistoryOperations.TransactionCompleted += OpenTransactionDispalay;
         }
+
         private void GeneratingAccounts(ObservableCollection<Client> clients)
         {
             for (int i = 0; i < clients.Count; i++)
@@ -149,6 +159,25 @@ namespace HomeWork13._7
                     replenishmentWindow.AmountAddMoney
                     );
             }
+        }
+
+        private void MenuChangeAnEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            EmployeeSelectionWindow openAccountWindow = new EmployeeSelectionWindow();
+            if (openAccountWindow.ShowDialog() == true)
+            {
+                Employee = openAccountWindow.GetWorker;
+            }
+        }
+        private void MenuOpenHistoryWindows_Click(object sender, RoutedEventArgs e)
+        {
+            HistoryOperationWindows historyOperationWindows = new HistoryOperationWindows(HistoryOperations);
+            historyOperationWindows.Show();
+        }
+        private void OpenTransactionDispalay(AccountTransaction accountTransaction)
+        {
+            TransactionDisplayWindows historyOperationWindows = new TransactionDisplayWindows(accountTransaction);
+            historyOperationWindows.Show();
         }
     }
 }

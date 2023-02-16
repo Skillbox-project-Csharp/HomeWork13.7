@@ -55,16 +55,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BankWorkers\Consultant.cs" />
-    <Compile Include="BankWorkers\Manager.cs" />
-    <Compile Include="BankWorkers\Worker.cs" />
+    <Compile Include="BankSystem\BankWorkers\Consultant.cs" />
+    <Compile Include="BankSystem\BankWorkers\Manager.cs" />
+    <Compile Include="BankSystem\BankWorkers\Worker.cs" />
+    <Compile Include="BankSystem\Documents\AccountTransaction\AccountTransaction.cs" />
+    <Compile Include="BankSystem\Documents\AccountTransaction\AccountTransactionHistory.cs" />
+    <Compile Include="BankSystem\Documents\DocumentBildHelper.cs" />
     <Compile Include="EmployeeSelectionWindow.xaml.cs">
       <DependentUpon>EmployeeSelectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HistoryOperationWindows.xaml.cs">
+      <DependentUpon>HistoryOperationWindows.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReplenishmentWindow.xaml.cs">
       <DependentUpon>ReplenishmentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TransactionDisplayWindows.xaml.cs">
+      <DependentUpon>TransactionDisplayWindows.xaml</DependentUpon>
+    </Compile>
     <Page Include="EmployeeSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HistoryOperationWindows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,6 +114,10 @@
     <Page Include="Resources\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TransactionDisplayWindows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

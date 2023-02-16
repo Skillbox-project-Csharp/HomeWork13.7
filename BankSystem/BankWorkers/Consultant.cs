@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace HomeWork13._7.BankWorkers
 {
-    internal class Manager : Worker
+    internal class Consultant : Worker
     {
-        public override event Action<Worker, object, object, bool> OpenCloseBankAccountEvent;
+        public override event Action<Worker, bool, object, object, bool> OpenCloseBankAccountEvent;
         public override event Action<Worker, object, object, object, object, object, bool> MoneyTransferEvent;
         public override event Action<Worker, object, object, object, bool> ReplenishmentAccountEvent;
 
-        public Manager(string name, string surName, string patronymic)
+        public Consultant(string name, string surName, string patronymic)
         {
             Name = name;
             SurName = surName;
@@ -24,36 +24,32 @@ namespace HomeWork13._7.BankWorkers
         public override bool CloseBankAccount<T>(Client client, T bankAccount)
         {
             bool statusOperation = Bank.CloseBankAccount(client, bankAccount);
-            OpenCloseBankAccountEvent?.Invoke(this,client,bankAccount, statusOperation);
+            OpenCloseBankAccountEvent?.Invoke(this,false,client, bankAccount, statusOperation);
             return statusOperation;
         }
+
         public override bool OpenNewBankAccount<T>(Client client, T bankAccount)
         {
             bool statusOperation = Bank.OpenNewBankAccount(client, bankAccount);
-            OpenCloseBankAccountEvent?.Invoke(this, client, bankAccount, statusOperation);
+            OpenCloseBankAccountEvent?.Invoke(this,true, client, bankAccount, statusOperation);
             return statusOperation;
         }
         public override bool MoneyTransfer<T, M>(Client sender, T senderAccount, Client recipient, M recipientAccount, double value)
         {
-            bool statusOperation = Bank.MoneyTransfer<T, M>(sender, senderAccount, recipient, recipientAccount, value);
-            MoneyTransferEvent?.Invoke(this, sender, senderAccount, recipient, recipientAccount, value, statusOperation);
-            return statusOperation;
+            MoneyTransferEvent?.Invoke(this, sender, senderAccount, recipient, recipientAccount, value, false);
+            return false;
         }
 
         public override bool MoneyTransferCov(Client sender, BankAccount senderAccount, Client recipient, BankAccount recipientAccount, double value)
         {
-            bool statusOperation = Bank.MoneyTransferCov(sender, senderAccount, recipient, recipientAccount, value);
-            MoneyTransferEvent?.Invoke(this, sender, senderAccount, recipient, recipientAccount, value, statusOperation);
-            return statusOperation;
+            MoneyTransferEvent?.Invoke(this, sender, senderAccount, recipient, recipientAccount, value, false);
+            return false;
         }
-
-
 
         public override bool ReplenishmentByTypeAccount(Client client, Type type, double value)
         {
-            bool statusOperation = Bank.ReplenishmentByTypeAccount(client, type, value);
-            ReplenishmentAccountEvent?.Invoke(this, client, type, value, statusOperation);
-            return statusOperation;
+            ReplenishmentAccountEvent?.Invoke(this, client, type, value, false);
+            return false;
         }
     }
 }

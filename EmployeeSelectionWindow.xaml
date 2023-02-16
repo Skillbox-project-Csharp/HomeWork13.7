@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock>Выберите тип сотрудника</TextBlock>
-            <ComboBox Name="TypesBankAccounts">
+            <ComboBox Name="TypesWorker">
                 <TextBlock>Менеджер</TextBlock>
                 <TextBlock>Консультант</TextBlock>
             </ComboBox>

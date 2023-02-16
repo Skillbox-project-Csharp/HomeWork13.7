@@ -24,7 +24,7 @@ namespace HomeWork13._7
         {
             get
             {
-                switch (TypesBankAccounts.SelectedIndex)
+                switch (TypesWorker.SelectedIndex)
                 {
                     case 0: return new Manager(InputName.Text, InputSurName.Text, InputPatronymic.Text);
                     case 1: return new Consultant(InputName.Text, InputSurName.Text, InputPatronymic.Text);
@@ -36,6 +36,8 @@ namespace HomeWork13._7
         public EmployeeSelectionWindow()
         {
             InitializeComponent();
+            TypesWorker.SelectedIndex = 0;
+
         }
         private void Accept_Click(object sender, RoutedEventArgs e)
         {

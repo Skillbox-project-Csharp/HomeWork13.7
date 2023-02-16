@@ -13,7 +13,7 @@ namespace HomeWork13._7.BankWorkers
         public string Name { get; set; }
         public string SurName { get; set; }
         public string Patronymic { get; set; }
-        public abstract event Action<Worker, object, object, bool> OpenCloseBankAccountEvent;
+        public abstract event Action<Worker, bool, object, object, bool> OpenCloseBankAccountEvent;
         public abstract event Action<Worker, object, object,object,object,object, bool> MoneyTransferEvent;
         public abstract event Action<Worker, object, object, object, bool> ReplenishmentAccountEvent;
         /// <summary>

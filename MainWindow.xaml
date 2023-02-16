@@ -13,7 +13,14 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-
+            <Menu>
+                <MenuItem 
+                    Header="История операций" 
+                    Click="MenuOpenHistoryWindows_Click"/>
+                <MenuItem 
+                    Header="Сменить работника" 
+                    Click="MenuChangeAnEmployee_Click"/>
+            </Menu>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
